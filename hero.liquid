@@ -1,0 +1,318 @@
+{% comment %}
+  Sección Hero - Editable desde el editor de Shopify
+{% endcomment %}
+
+<section class="hero" id="section-{{ section.id }}" data-section-id="{{ section.id }}">
+  <div class="container">
+    <div class="hero-wrapper">
+      <div class="hero-content">
+        {% if section.settings.badge_text != blank %}
+          <span class="hero-badge">{{ section.settings.badge_text }}</span>
+        {% endif %}
+        
+        <h1 class="hero-title">{{ section.settings.title }}</h1>
+        
+        {% if section.settings.description != blank %}
+          <p class="hero-description">{{ section.settings.description }}</p>
+        {% endif %}
+        
+        {% if section.settings.show_features %}
+          <div class="hero-features">
+            {% for block in section.blocks %}
+              {% if block.type == 'feature' %}
+                <div class="feature-item" {{ block.shopify_attributes }}>
+                  <span class="feature-icon">{{ block.settings.icon }}</span>
+                  <span>{{ block.settings.text }}</span>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <div class="hero-ctas">
+          {% if section.settings.button_1_text != blank %}
+            <a href="{{ section.settings.button_1_link }}" class="btn btn-primary btn-large">
+              {{ section.settings.button_1_text }}
+              {% if section.settings.button_1_show_icon %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {% endif %}
+            </a>
+          {% endif %}
+          
+          {% if section.settings.button_2_text != blank %}
+            <button class="btn btn-secondary btn-large" onclick="openGuiaPopup()">
+              {{ section.settings.button_2_text }}
+            </button>
+          {% endif %}
+        </div>
+        
+        {% if section.settings.show_shipping %}
+          <div class="hero-shipping">
+            <span class="shipping-icon">{{ section.settings.shipping_icon }}</span>
+            <span>{{ section.settings.shipping_text }}</span>
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="hero-image">
+        <div class="hero-image-wrapper">
+          {% if section.settings.image != blank %}
+            <img src="{{ section.settings.image | img_url: 'master' }}" 
+                 alt="{{ section.settings.image_alt | default: section.settings.title }}" 
+                 loading="eager"
+                 width="{{ section.settings.image.width }}"
+                 height="{{ section.settings.image.height }}">
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+          
+          {% if section.settings.show_price_badge %}
+            <div class="hero-badge-float">
+              <span class="badge-price">{{ section.settings.price_badge }}</span>
+              <span class="badge-text">{{ section.settings.price_badge_text }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% if section.settings.show_bg_elements %}
+    <div class="hero-bg-elements">
+      <div class="bg-circle bg-circle-1"></div>
+      <div class="bg-circle bg-circle-2"></div>
+      <div class="bg-circle bg-circle-3"></div>
+    </div>
+  {% endif %}
+</section>
+
+<style>
+  #section-{{ section.id }} {
+    --hero-bg-color: {{ section.settings.bg_color }};
+    --hero-text-color: {{ section.settings.text_color }};
+    --hero-accent-color: {{ section.settings.accent_color }};
+    background: linear-gradient(135deg, var(--hero-bg-color) 0%, #ffffff 100%);
+  }
+  
+  #section-{{ section.id }} .hero-title {
+    color: var(--hero-text-color);
+  }
+  
+  #section-{{ section.id }} .text-gradient {
+    background: linear-gradient(135deg, var(--hero-accent-color) 0%, {{ section.settings.secondary_color }} 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Hero Principal",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenido Principal"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto del Badge",
+      "default": "🔥 Producto Destacado"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Título",
+      "default": "Alcanza tu Máximo Potencial con HomaDropi"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Suplementos de alta calidad para potenciar tu rendimiento, aumentar tu fuerza y alcanzar tus objetivos fitness."
+    },
+    {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen del Hero"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Texto Alternativo de la Imagen"
+    },
+    {
+      "type": "header",
+      "content": "Botones"
+    },
+    {
+      "type": "text",
+      "id": "button_1_text",
+      "label": "Texto Botón Principal",
+      "default": "Ver Producto"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Link Botón Principal"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_1_show_icon",
+      "label": "Mostrar ícono en botón principal",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_2_text",
+      "label": "Texto Botón Secundario",
+      "default": "Descargar Guía Gratis"
+    },
+    {
+      "type": "header",
+      "content": "Badge de Precio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_badge",
+      "label": "Mostrar badge de precio",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "price_badge",
+      "label": "Precio en Badge",
+      "default": "$19.990"
+    },
+    {
+      "type": "text",
+      "id": "price_badge_text",
+      "label": "Texto debajo del precio",
+      "default": "300g / 60 servicios"
+    },
+    {
+      "type": "header",
+      "content": "Envío"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping",
+      "label": "Mostrar info de envío",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_icon",
+      "label": "Ícono de Envío",
+      "default": "🚚"
+    },
+    {
+      "type": "text",
+      "id": "shipping_text",
+      "label": "Texto de Envío",
+      "default": "Envío GRATIS a todo Chile - Contraentrega"
+    },
+    {
+      "type": "header",
+      "content": "Características"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_features",
+      "label": "Mostrar lista de características",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Apariencia"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Color de Fondo",
+      "default": "#F7FAFC"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del Texto",
+      "default": "#2D3748"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Color de Acento",
+      "default": "#FF6B4A"
+    },
+    {
+      "type": "color",
+      "id": "secondary_color",
+      "label": "Color Secundario",
+      "default": "#4ECDC4"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bg_elements",
+      "label": "Mostrar elementos decorativos de fondo",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Característica",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Ícono/Emoji",
+          "default": "✓"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Productos 100% originales"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Principal",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "✓",
+            "text": "Productos 100% originales"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "✓",
+            "text": "Envío gratis contraentrega"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "✓",
+            "text": "Guía gratuita incluida"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#ff6b35">
+  <link rel="canonical" href="{{ canonical_url }}">
+  
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  {{ content_for_header }}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="template-{{ request.page_type | handle }}">
+  
+  {% section 'header' %}
+  
+  <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+  
+  {% section 'footer' %}
+  
+  <!-- POPUP GUÍA GRATIS -->
+  <div id="popup-guia" class="popup-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 99999; justify-content: center; align-items: center; padding: 20px;">
+    <div class="popup-content" style="background: white; border-radius: 20px; max-width: 450px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative;">
+      
+      <button type="button" class="popup-close" onclick="closeGuiaPopup()" style="position: absolute; top: 15px; right: 15px; background: #f5f5f5; border: none; font-size: 1.5rem; cursor: pointer; color: #666; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; z-index: 10;">&times;</button>
+      
+      <div class="popup-header" style="padding: 30px 30px 0; text-align: center;">
+        <!-- LOGO -->
+        {% if settings.logo != blank %}
+          <img src="{{ settings.logo | img_url: 'medium' }}" alt="{{ shop.name }}" style="max-height: 60px; width: auto; margin-bottom: 10px;">
+        {% else %}
+          <h3 style="color: #ff6b35; font-size: 1.5rem; font-weight: 800; margin-bottom: 10px;">{{ shop.name }}</h3>
+        {% endif %}
+      </div>
+      
+      <div class="popup-body" style="padding: 20px 30px 30px;">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #2d3748; margin-bottom: 10px; text-align: center; line-height: 1.3;">¡Obtén tu Guía GRATIS al comprar nuestra CREATINA!</h2>
+        
+        <p style="color: #718096; line-height: 1.6; margin-bottom: 20px; text-align: center;">
+          Descarga nuestra guía completa sobre creatina: usos, beneficios y cómo usarla correctamente.
+        </p>
+        
+        <ul style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 12px; list-style: none;">
+          <li style="padding: 8px 0; color: #4a5568; display: flex; align-items: center; gap: 10px;"><span style="color: #48bb78; font-weight: bold;">✓</span> ¿Qué es y cómo funciona?</li>
+          <li style="padding: 8px 0; color: #4a5568; display: flex; align-items: center; gap: 10px;"><span style="color: #48bb78; font-weight: bold;">✓</span> Beneficios científicamente probados</li>
+          <li style="padding: 8px 0; color: #4a5568; display: flex; align-items: center; gap: 10px;"><span style="color: #48bb78; font-weight: bold;">✓</span> Dosis y protocolos de uso</li>
+          <li style="padding: 8px 0; color: #4a5568; display: flex; align-items: center; gap: 10px;"><span style="color: #48bb78; font-weight: bold;">✓</span> Mitos y verdades desmentidos</li>
+          <li style="padding: 8px 0; color: #4a5568; display: flex; align-items: center; gap: 10px;"><span style="color: #48bb78; font-weight: bold;">✓</span> 10+ páginas de información valiosa</li>
+        </ul>
+        
+        <form onsubmit="submitGuiaForm(event)">
+          <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2d3748; font-size: 0.9rem;">Nombre</label>
+          <input type="text" id="guia-nombre" name="nombre" placeholder="Tu nombre" required style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; margin-bottom: 15px; font-family: inherit; box-sizing: border-box;">
+          
+          <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #2d3748; font-size: 0.9rem;">Email</label>
+          <input type="email" id="guia-email" name="email" placeholder="tu@email.com" required style="width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; margin-bottom: 20px; font-family: inherit; box-sizing: border-box;">
+          
+          <button type="submit" style="width: 100%; padding: 16px; background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer;">
+            Descargar Guía Gratis
+          </button>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+  
+  {{ content_for_footer }}
+  
+  {{ 'theme.js' | asset_url | script_tag }}
+  
+  <script>
+    // POPUP FUNCTIONS GLOBALES
+    window.openGuiaPopup = function() {
+      var popup = document.getElementById('popup-guia');
+      if (popup) {
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+    
+    window.closeGuiaPopup = function() {
+      var popup = document.getElementById('popup-guia');
+      if (popup) {
+        popup.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    };
+    
+    // Cerrar al hacer click fuera
+    document.getElementById('popup-guia').addEventListener('click', function(e) {
+      if (e.target === this) {
+        window.closeGuiaPopup();
+      }
+    });
+    
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        window.closeGuiaPopup();
+      }
+    });
+    
+    // Submit del formulario
+    window.submitGuiaForm = function(e) {
+      e.preventDefault();
+      var nombre = document.getElementById('guia-nombre').value;
+      var email = document.getElementById('guia-email').value;
+      
+      alert('¡Gracias ' + nombre + '! Te enviaremos la guía a ' + email + ' al momento de confirmar tu compra.');
+      window.closeGuiaPopup();
+      e.target.reset();
+    };
+  </script>
+  
+</body>
+</html>

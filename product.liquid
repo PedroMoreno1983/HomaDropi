@@ -1,0 +1,459 @@
+<!-- PRODUCT HERO -->
+<section class="product-hero">
+  <div class="container">
+    <div class="product-breadcrumbs">
+      <a href="/">Inicio</a>
+      <span>/</span>
+      <a href="/collections/all">Productos</a>
+      <span>/</span>
+      <span>{{ product.title }}</span>
+    </div>
+    
+    <div class="product-main">
+      <div class="product-gallery">
+        <div class="gallery-main">
+          {% if product.featured_image %}
+            <img src="{{ product.featured_image | img_url: 'large' }}" alt="{{ product.title }}" id="main-image" loading="eager">
+          {% else %}
+            <img src="{{ 'creatina-producto.png' | asset_url }}" alt="{{ product.title }}" id="main-image" loading="eager">
+          {% endif %}
+        </div>
+        
+        {% if product.images.size > 1 %}
+          <div class="gallery-thumbs">
+            {% for image in product.images %}
+              <button class="thumb-btn {% if forloop.first %}active{% endif %}" data-image="{{ image | img_url: 'large' }}">
+                <img src="{{ image | img_url: 'small' }}" alt="{{ product.title }} - Vista {{ forloop.index }}">
+              </button>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="product-details">
+        <span class="product-brand-badge">Vidanova Suples</span>
+        <h1 class="product-name">{{ product.title }}</h1>
+        
+        <div class="product-rating">
+          <span class="stars">⭐⭐⭐⭐⭐</span>
+          <span class="rating-count">4.9 (127 reseñas)</span>
+        </div>
+        
+        <div class="product-short-desc">
+          <p>Creatina Monohidratada Micronizada PRO - 300g / 60 servicios. La forma más estudiada y efectiva de creatina para potenciar tu rendimiento.</p>
+        </div>
+        
+        <div class="product-price-wrap">
+          {% if product.compare_at_price > product.price %}
+            <span class="price-compare">{{ product.compare_at_price | money }}</span>
+          {% endif %}
+          <span class="price-sale">{{ product.price | money }}</span>
+          <span class="price-tag">Oferta especial</span>
+        </div>
+        
+        <div class="product-includes">
+          <div class="include-item">
+            <span class="include-icon">📚</span>
+            <span><strong>Guía gratuita</strong> incluida</span>
+          </div>
+          <div class="include-item">
+            <span class="include-icon">🚚</span>
+            <span><strong>Envío gratis</strong> a todo Chile</span>
+          </div>
+          <div class="include-item">
+            <span class="include-icon">💰</span>
+            <span><strong>Contraentrega</strong> - Paga al recibir</span>
+          </div>
+        </div>
+        
+        {% form 'product', product %}
+          <div class="product-variants">
+            {% if product.variants.size > 1 %}
+              <label for="variant-select">Selecciona tu opción:</label>
+              <select name="id" id="variant-select" class="variant-select">
+                {% for variant in product.variants %}
+                  <option value="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}>
+                    {{ variant.title }} - {{ variant.price | money }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% else %}
+              <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+            {% endif %}
+          </div>
+          
+          <div class="product-quantity">
+            <label for="quantity">Cantidad:</label>
+            <div class="quantity-selector">
+              <button type="button" class="qty-btn qty-minus">-</button>
+              <input type="number" name="quantity" id="quantity" value="1" min="1" max="10">
+              <button type="button" class="qty-btn qty-plus">+</button>
+            </div>
+          </div>
+          
+          <div class="product-actions">
+            <button type="submit" class="btn btn-primary btn-xlarge btn-add-cart">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="9" cy="20" r="1.5" fill="currentColor"/>
+                <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+                <path d="M6 6L5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Agregar al Carrito
+            </button>
+          </div>
+        {% endform %}
+        
+        <div class="product-trust">
+          <div class="trust-item">
+            <span class="trust-icon">✓</span>
+            <span>Producto original</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">✓</span>
+            <span>Envío gratis</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">✓</span>
+            <span>Contraentrega</span>
+          </div>
+        </div>
+        
+        <div class="product-guia-cta">
+          <div class="guia-cta-content">
+            <span class="guia-cta-icon">📖</span>
+            <div class="guia-cta-text">
+              <strong>¿Quieres saber más sobre creatina?</strong>
+              <span>Descarga al comprar nuestra CREATINA la guía científica gratuita</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="openGuiaPopup()">Descargar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT SPECS -->
+<section class="product-specs-section">
+  <div class="container">
+    <div class="specs-grid">
+      <div class="spec-card">
+        <div class="spec-icon">⚖️</div>
+        <div class="spec-info">
+          <span class="spec-value-large">300g</span>
+          <span class="spec-label">Contenido Neto</span>
+        </div>
+      </div>
+      
+      <div class="spec-card">
+        <div class="spec-icon">🥤</div>
+        <div class="spec-info">
+          <span class="spec-value-large">60</span>
+          <span class="spec-label">Servicios</span>
+        </div>
+      </div>
+      
+      <div class="spec-card">
+        <div class="spec-icon">💊</div>
+        <div class="spec-info">
+          <span class="spec-value-large">5g</span>
+          <span class="spec-label">Creatina por servicio</span>
+        </div>
+      </div>
+      
+      <div class="spec-card">
+        <div class="spec-icon">🔬</div>
+        <div class="spec-info">
+          <span class="spec-value-large">200</span>
+          <span class="spec-label">Mesh (micronizada)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT TABS -->
+<section class="product-tabs-section">
+  <div class="container">
+    <div class="tabs-wrapper">
+      <div class="tabs-header">
+        <button class="tab-btn active" data-tab="descripcion">Descripción</button>
+        <button class="tab-btn" data-tab="beneficios">Beneficios</button>
+        <button class="tab-btn" data-tab="uso">Modo de Uso</button>
+        <button class="tab-btn" data-tab="envio">Envío</button>
+      </div>
+      
+      <div class="tabs-content">
+        <div class="tab-panel active" id="descripcion">
+          <div class="tab-content-wrapper">
+            <div class="tab-text">
+              <h3>Creatina Monohidratada Micronizada PRO</h3>
+              <p>La <strong>creatina monohidratada</strong> es la forma más estudiada y respaldada por la ciencia de este suplemento deportivo. Es un compuesto natural que se sintetiza en el hígado, riñones y páncreas a partir de tres aminoácidos esenciales: glicina, arginina y metionina.</p>
+              
+              <p>Aproximadamente el <strong>95% de la creatina</strong> se almacena en el músculo esquelético, donde actúa como una reserva de energía de alta intensidad. Durante ejercicios explosivos como levantamiento de pesas, sprint o saltos, la creatina ayuda a regenerar ATP rápidamente, permitiéndote mantener el esfuerzo por más tiempo.</p>
+              
+              <h4>¿Por qué elegir nuestra creatina?</h4>
+              <ul>
+                <li>✓ <strong>Micronizada 200 mesh</strong>: Partículas más pequeñas para mejor disolución y absorción</li>
+                <li>✓ <strong>100% pura</strong>: Sin aditivos, sabores artificiales ni rellenos</li>
+                <li>✓ <strong>Marca certificada</strong>: Vidanova Suples, calidad garantizada</li>
+                <li>✓ <strong>60 servicios</strong>: Suministro para 2 meses de uso continuo</li>
+              </ul>
+            </div>
+            <div class="tab-image">
+              <img src="{{ 'creatina-producto.png' | asset_url }}" alt="Creatina Vidanova PRO" loading="lazy">
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-panel" id="beneficios">
+          <div class="benefits-list">
+            <div class="benefit-detail">
+              <div class="bd-icon">💪</div>
+              <div class="bd-content">
+                <h4>Aumento de Fuerza</h4>
+                <p>Meta-análisis científicos muestran aumentos superiores en fuerza máxima cuando se combina creatina con entrenamiento de resistencia. Los incrementos pueden oscilar entre 5-15% en algunos contextos.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-detail">
+              <div class="bd-icon">🧬</div>
+              <div class="bd-content">
+                <h4>Ganancia de Masa Muscular</h4>
+                <p>Estudios demuestran aumentos superiores en masa libre de grasa cuando se combina creatina con entrenamiento adecuado. El aumento inicial de peso suele deberse a hidratación intracelular, no grasa.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-detail">
+              <div class="bd-icon">⚡</div>
+              <div class="bd-content">
+                <h4>Rendimiento en Alta Intensidad</h4>
+                <p>La creatina mejora potencia pico, capacidad de repetir sprints y trabajo total realizado. Especialmente útil en deportes intermitentes y de fuerza.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-detail">
+              <div class="bd-icon">🔄</div>
+              <div class="bd-content">
+                <h4>Recuperación Muscular</h4>
+                <p>Algunos estudios indican reducción de marcadores de daño muscular e inflamación, aunque la evidencia es menos robusta que en fuerza y potencia.</p>
+              </div>
+            </div>
+            
+            <div class="benefit-detail">
+              <div class="bd-icon">🧠</div>
+              <div class="bd-content">
+                <h4>Beneficios Cognitivos Potenciales</h4>
+                <p>El cerebro también utiliza ATP como fuente de energía. Investigaciones sugieren posibles beneficios en memoria de trabajo, particularmente en personas con baja ingesta dietética de creatina.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-panel" id="uso">
+          <div class="uso-content">
+            <div class="uso-card">
+              <h4>📋 Dosis Recomendada</h4>
+              <p><strong>3-5 g diarios</strong>, aproximadamente 0,03 g/kg/día. Esta es la dosis de mantenimiento estándar respaldada por la investigación científica.</p>
+            </div>
+            
+            <div class="uso-card">
+              <h4>⚡ Fase de Carga (Opcional)</h4>
+              <p><strong>0,3 g/kg/día por 5-7 días</strong>. Esto acelera la saturación muscular, pero no es obligatorio para obtener beneficios. Puedes tomar 3-5g diarios y saturar los músculos en 3-4 semanas.</p>
+            </div>
+            
+            <div class="uso-card">
+              <h4>⏰ Momento de Consumo</h4>
+              <p>La <strong>consistencia es más importante que el horario</strong>. Algunos estudios sugieren ligera ventaja post-entrenamiento, pero la diferencia no es determinante.</p>
+            </div>
+            
+            <div class="uso-card">
+              <h4>🥤 Cómo Tomarla</h4>
+              <p>Mezcla 1 scoop (5g) con <strong>agua, jugo o tu bebida preferida</strong>. Puede mezclarse con proteína o carbohidratos. No es obligatorio mezclar con azúcar, aunque puede mejorar ligeramente la absorción.</p>
+            </div>
+            
+            <div class="uso-card">
+              <h4>📅 Duración del Uso</h4>
+              <p>El <strong>uso continuo es considerado seguro</strong> en personas sanas según evidencia disponible. No hay límite de tiempo establecido para su consumo responsable.</p>
+            </div>
+            
+            <div class="uso-card highlight">
+              <h4>💡 Consejo Pro</h4>
+              <p>Mantén una <strong>hidratación adecuada</strong> al usar creatina. La creatina aumenta la retención de agua intracelular, por lo que es importante beber suficiente agua durante el día.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-panel" id="envio">
+          <div class="envio-content">
+            <div class="envio-highlight">
+              <span class="envio-icon">🚚</span>
+              <div class="envio-text">
+                <h3>Envío Gratis a Todo Chile</h3>
+                <p>Despacho sin costo a cualquier región de Chile</p>
+              </div>
+            </div>
+            
+            <div class="envio-details">
+              <div class="envio-item">
+                <span class="ei-icon">💰</span>
+                <div class="ei-content">
+                  <h4>Pago Contraentrega</h4>
+                  <p>Paga solo cuando recibes tu producto en la puerta de tu casa. Sin riesgos, sin pagos anticipados.</p>
+                </div>
+              </div>
+              
+              <div class="envio-item">
+                <span class="ei-icon">📦</span>
+                <div class="ei-content">
+                  <h4>Embalaje Seguro</h4>
+                  <p>Tu producto viene perfectamente protegido para llegar en óptimas condiciones.</p>
+                </div>
+              </div>
+              
+              <div class="envio-item">
+                <span class="ei-icon">⚡</span>
+                <div class="ei-content">
+                  <h4>Despacho Rápido</h4>
+                  <p>Procesamos tu pedido en 24-72 horas hábiles. El tiempo de entrega depende de tu ubicación.</p>
+                </div>
+              </div>
+              
+              <div class="envio-item">
+                <span class="ei-icon">🎁</span>
+                <div class="ei-content">
+                  <h4>Incluye Guía Gratis</h4>
+                  <p>Todos nuestros pedidos incluyen acceso a nuestra guía completa sobre creatina.</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="envio-note">
+              <p><strong>Nota:</strong> El tiempo de entrega puede variar según la región. Santiago y regiones centrales suelen tener entregas más rápidas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GUIA CTA SECTION -->
+<section class="product-guia-section">
+  <div class="container">
+    <div class="guia-cta-box">
+      <div class="guia-cta-left">
+        <img src="{{ 'guia-creatina-cover.jpg' | asset_url }}" alt="Guía de Creatina" loading="lazy">
+      </div>
+      <div class="guia-cta-right">
+        <span class="guia-tag">REGALO INCLUIDO</span>
+        <h3>Guía Completa de Creatina</h3>
+        <p>Descarga, al comprar nuestra CREATINA, la guía científica definitiva con todo lo que necesitas saber sobre creatina:</p>
+        <ul>
+          <li>✓ ¿Qué es y cómo funciona?</li>
+          <li>✓ Beneficios científicamente probados</li>
+          <li>✓ Dosis y protocolos de uso</li>
+          <li>✓ Mitos y verdades desmentidos</li>
+          <li>✓ 10+ páginas de información valiosa</li>
+        </ul>
+        <button class="btn btn-primary btn-large" onclick="openGuiaPopup()">
+          Descargar Guía Gratis
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED PRODUCTS -->
+{% if collection.products.size > 1 %}
+<section class="related-products">
+  <div class="container">
+    <h2 class="section-title">También te puede interesar</h2>
+    <div class="products-grid">
+      {% for related_product in collection.products limit: 4 %}
+        {% unless related_product.id == product.id %}
+          <div class="product-card">
+            <a href="{{ related_product.url }}">
+              <div class="product-card-image">
+                <img src="{{ related_product.featured_image | img_url: 'medium' }}" alt="{{ related_product.title }}" loading="lazy">
+              </div>
+              <h3 class="product-card-title">{{ related_product.title }}</h3>
+              <span class="product-card-price">{{ related_product.price | money }}</span>
+            </a>
+          </div>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- FINAL CTA -->
+<section class="product-final-cta">
+  <div class="container">
+    <div class="final-cta-wrapper">
+      <h2>¿Listo para transformar tu rendimiento?</h2>
+      <p>Obtén tu Creatina Vidanova PRO con envío gratis y guía completa</p>
+      <div class="final-cta-price">
+        <span class="fcp-price">{{ product.price | money }}</span>
+        <span class="fcp-note">Envío gratis · Guía incluida · Contraentrega</span>
+      </div>
+      <button class="btn btn-primary btn-xlarge" onclick="document.querySelector('.product-actions button').click()">
+        Comprar Ahora
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Tabs functionality
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+  
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tabId = this.dataset.tab;
+      
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+      
+      this.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+  
+  // Quantity selector
+  const qtyInput = document.getElementById('quantity');
+  const qtyMinus = document.querySelector('.qty-minus');
+  const qtyPlus = document.querySelector('.qty-plus');
+  
+  if (qtyMinus && qtyPlus && qtyInput) {
+    qtyMinus.addEventListener('click', function() {
+      let val = parseInt(qtyInput.value);
+      if (val > 1) qtyInput.value = val - 1;
+    });
+    
+    qtyPlus.addEventListener('click', function() {
+      let val = parseInt(qtyInput.value);
+      if (val < 10) qtyInput.value = val + 1;
+    });
+  }
+  
+  // Gallery thumbs
+  const thumbBtns = document.querySelectorAll('.thumb-btn');
+  const mainImage = document.getElementById('main-image');
+  
+  thumbBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      thumbBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      mainImage.src = this.dataset.image;
+    });
+  });
+});
+</script>

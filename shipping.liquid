@@ -1,0 +1,176 @@
+{% comment %}
+  Sección de Envío - Corregida y Centrada
+{% endcomment %}
+
+<section class="shipping-section" id="section-{{ section.id }}" style="background: {{ section.settings.bg_color }};">
+  <div class="container">
+    
+    <div class="shipping-icon">{{ section.settings.icon }}</div>
+    
+    <h2 class="shipping-title" style="color: {{ section.settings.text_color }};">{{ section.settings.title }}</h2>
+    
+    <p class="shipping-description" style="color: {{ section.settings.description_color }};">{{ section.settings.description }}</p>
+    
+    {% if section.settings.video_url != blank %}
+      <div class="video-container">
+        {% if section.settings.video_url contains 'youtube' or section.settings.video_url contains 'youtu.be' %}
+          <iframe 
+            width="100%" 
+            height="350" 
+            src="{{ section.settings.video_url | replace: 'watch?v=', 'embed/' | replace: 'youtu.be/', 'youtube.com/embed/' }}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        {% else %}
+          <video controls playsinline>
+            <source src="{{ section.settings.video_url }}" type="video/mp4">
+            Tu navegador no soporta videos.
+          </video>
+        {% endif %}
+      </div>
+    {% elsif section.settings.image != blank %}
+      <img src="{{ section.settings.image | img_url: 'master' }}" 
+           alt="{{ section.settings.title }}"
+           style="max-width: 400px; margin: 0 auto 30px; display: block; border-radius: 16px;">
+    {% endif %}
+    
+    <div class="shipping-features">
+      {% for block in section.blocks %}
+        {% if block.type == 'feature' %}
+          <div class="shipping-feature" {{ block.shopify_attributes }}>
+            <span class="shipping-feature-icon">{{ block.settings.icon }}</span>
+            <span class="shipping-feature-text">{{ block.settings.text }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Envío Gratis",
+  "tag": "section",
+  "class": "section-shipping",
+  "settings": [
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Ícono/Emoji",
+      "default": "🚚"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Envío Gratis a Todo Chile"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Despacho sin costo a cualquier región de Chile. Paga solo cuando recibes el producto en la puerta de tu casa."
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "URL del Video",
+      "accept": ["youtube", "vimeo"],
+      "info": "YouTube o video MP4. Deja vacío para usar imagen."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen alternativa"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Color de fondo",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del título",
+      "default": "#2d3748"
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Color de descripción",
+      "default": "#718096"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado Superior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado Inferior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Característica",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Ícono",
+          "default": "🚚"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Despacho a todo Chile"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Envío Gratis",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "🚚",
+            "text": "Despacho a todo Chile"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "💰",
+            "text": "Pago contraentrega"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "⚡",
+            "text": "Entrega rápida"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

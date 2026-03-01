@@ -1,0 +1,96 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "HomaDropi",
+    "theme_version": "1.0.0",
+    "theme_author": "HomaDropi",
+    "theme_documentation_url": "https://homadropi.cl",
+    "theme_support_url": "https://homadropi.cl"
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Color Primario",
+        "default": "#FF6B4A"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Color Secundario",
+        "default": "#4ECDC4"
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Color Oscuro",
+        "default": "#2D3748"
+      },
+      {
+        "type": "color",
+        "id": "color_light",
+        "label": "Color Claro",
+        "default": "#F7FAFC"
+      }
+    ]
+  },
+  {
+    "name": "Tipografía",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Fuente de Encabezados",
+        "default": "inter_n7"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Fuente del Cuerpo",
+        "default": "inter_n4"
+      }
+    ]
+  },
+  {
+    "name": "Redes Sociales",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "@homadropi"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp",
+        "label": "WhatsApp",
+        "default": "+56912345678"
+      },
+      {
+        "type": "text",
+        "id": "social_email",
+        "label": "Email",
+        "default": "contacto@homadropi.cl"
+      }
+    ]
+  },
+  {
+    "name": "Información de Envío",
+    "settings": [
+      {
+        "type": "text",
+        "id": "envio_titulo",
+        "label": "Título de Envío",
+        "default": "Envío Gratis a Todo Chile"
+      },
+      {
+        "type": "textarea",
+        "id": "envio_descripcion",
+        "label": "Descripción de Envío",
+        "default": "Despacho gratis contraentrega a todo Chile. Paga cuando recibes tu producto."
+      }
+    ]
+  }
+]

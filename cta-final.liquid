@@ -1,0 +1,158 @@
+{% comment %}
+  CTA Final - UN SOLO BOTÓN
+{% endcomment %}
+
+<section class="cta-section" id="section-{{ section.id }}" style="background: linear-gradient(135deg, {{ section.settings.bg_gradient_start }} 0%, {{ section.settings.bg_gradient_end }} 100%); padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    
+    <h2 class="cta-title">{{ section.settings.title }}</h2>
+    
+    <p class="cta-subtitle">{{ section.settings.subtitle }}</p>
+    
+    {% if section.settings.product_url != blank %}
+      <a href="{{ section.settings.product_url }}" class="cta-button">
+        {{ section.settings.button_text }}
+      </a>
+    {% else %}
+      <button type="button" class="cta-button" onclick="scrollToProduct()">
+        {{ section.settings.button_text }}
+      </button>
+    {% endif %}
+    
+    {% if section.blocks.size > 0 %}
+      <p class="cta-note">
+        {% for block in section.blocks %}
+          {% if block.type == 'badge' %}
+            <span style="margin: 0 8px; white-space: nowrap;">{{ block.settings.icon }} {{ block.settings.text }}</span>
+          {% endif %}
+        {% endfor %}
+      </p>
+    {% endif %}
+    
+  </div>
+</section>
+
+<script>
+function scrollToProduct() {
+  const product = document.querySelector('.section-featured-product, .product-featured, [data-section-type="product"]');
+  if (product) {
+    product.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "CTA Final",
+  "tag": "section",
+  "class": "section-cta",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "¿Listo para potenciar tu rendimiento?"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Obtén tu creatina Vidanova PRO con envío gratis y guía completa incluida"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "Comprar Ahora - $29.990"
+    },
+    {
+      "type": "url",
+      "id": "product_url",
+      "label": "URL del producto (opcional)",
+      "info": "Deja vacío para hacer scroll al producto automáticamente"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_start",
+      "label": "Color degradado inicial",
+      "default": "#ff6b35"
+    },
+    {
+      "type": "color",
+      "id": "bg_gradient_end",
+      "label": "Color degradado final",
+      "default": "#ff8c42"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado Superior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 60,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado Inferior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 60,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Ícono",
+          "default": "🚚"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Envío gratis a todo Chile"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA Final",
+      "blocks": [
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "🚚",
+            "text": "Envío gratis a todo Chile"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "💰",
+            "text": "Pago contraentrega"
+          }
+        },
+        {
+          "type": "badge",
+          "settings": {
+            "icon": "📚",
+            "text": "Guía incluida"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

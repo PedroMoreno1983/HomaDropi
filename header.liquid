@@ -1,0 +1,410 @@
+<header class="header-v2">
+  <div class="header-v2-top">
+    <div class="header-v2-container">
+
+      <!-- Logo -->
+      <a href="/" class="header-v2-logo">
+        {% if section.settings.logo != blank %}
+          <img src="{{ section.settings.logo | img_url: 'medium' }}" class="logo-v2-img" alt="{{ shop.name }}">
+        {% else %}
+          <span class="logo-v2-text">{{ shop.name }}</span>
+        {% endif %}
+      </a>
+
+      <!-- Navegación principal (desktop) -->
+      <nav class="header-v2-nav desktop-nav">
+        <a href="/" class="nav-v2-link">Inicio</a>
+        <a href="/collections/all" class="nav-v2-link">Catálogo</a>
+      </nav>
+
+      <!-- Acciones derecha -->
+      <div class="header-v2-actions">
+        <button class="search-toggle-v2" aria-label="Buscar">
+          🔍
+        </button>
+        <a href="/account" class="header-v2-link account-v2" aria-label="Mi cuenta">
+          👤
+        </a>
+        <a href="/checkout" class="header-v2-cart" aria-label="Carrito">
+          🛒
+        </a>
+        <button class="menu-toggle-v2 mobile-only" onclick="toggleMenuV2()" aria-label="Menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Buscador (oculto por defecto) -->
+  <div class="header-v2-search-bar" id="searchBarV2">
+    <div class="header-v2-container">
+      <form action="/search" method="get" class="search-form-v2">
+        <input
+          type="text"
+          name="q"
+          placeholder="Buscar productos..."
+          class="search-input-v2"
+          autocomplete="off"
+        >
+        <button type="submit" class="search-btn-v2">Buscar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Menú móvil (oculto por defecto) -->
+  <nav class="header-v2-mobile-menu" id="mobileMenuV2">
+    <a href="/" class="mobile-nav-v2-link">Inicio</a>
+    <a href="/collections/all" class="mobile-nav-v2-link">Catálogo</a>
+  </nav>
+
+</header>
+
+<style>
+/* ========================================
+   HEADER V2 - NUEVO DISEÑO
+   ======================================== */
+
+.header-v2 {
+  background: white;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.header-v2-top {
+  width: 100%;
+  padding: 0;
+}
+
+.header-v2-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  box-sizing: border-box;
+}
+
+/* Logo */
+.header-v2-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: fit-content;
+}
+
+.logo-v2-img {
+  height: 35px;
+  width: auto;
+  max-width: 120px;
+  display: block;
+}
+
+.logo-v2-text {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ff6b35;
+  white-space: nowrap;
+}
+
+/* Navegación desktop */
+.header-v2-nav {
+  display: none;
+  gap: 5px;
+  align-items: center;
+}
+
+.nav-v2-link {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+  border-radius: 4px;
+}
+
+.nav-v2-link:hover {
+  color: #ff6b35;
+  background: #f5f5f5;
+}
+
+/* Acciones derecha */
+.header-v2-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.search-toggle-v2,
+.header-v2-link,
+.header-v2-cart {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  transition: opacity 0.3s ease;
+  text-decoration: none;
+  color: #333;
+}
+
+.search-toggle-v2:hover,
+.header-v2-link:hover,
+.header-v2-cart:hover {
+  opacity: 0.7;
+}
+
+/* Menú hamburguesa */
+.menu-toggle-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+}
+
+.menu-toggle-v2 span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #333;
+  transition: all 0.3s ease;
+}
+
+.menu-toggle-v2.active span:nth-child(1) {
+  transform: rotate(45deg) translate(10px, 10px);
+}
+
+.menu-toggle-v2.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle-v2.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Buscador */
+.header-v2-search-bar {
+  display: none;
+  border-top: 1px solid #eee;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.header-v2-search-bar.active {
+  display: block;
+}
+
+.search-form-v2 {
+  display: flex;
+  gap: 0;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.search-input-v2 {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  font-size: 14px;
+}
+
+.search-input-v2:focus {
+  outline: none;
+  border-color: #ff6b35;
+}
+
+.search-btn-v2 {
+  padding: 12px 20px;
+  background: #ff6b35;
+  color: white;
+  border: 1px solid #ff6b35;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.search-btn-v2:hover {
+  background: #e55a25;
+}
+
+/* Menú móvil */
+.header-v2-mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid #eee;
+  background: white;
+}
+
+.header-v2-mobile-menu.active {
+  display: flex;
+}
+
+.mobile-nav-v2-link {
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+  transition: background 0.3s ease;
+}
+
+.mobile-nav-v2-link:hover {
+  background: #f5f5f5;
+  color: #ff6b35;
+}
+
+/* utilidad */
+.mobile-only {
+  display: block;
+}
+
+.account-v2 {
+  display: none;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (min-width: 480px) {
+  .header-v2-container {
+    padding: 14px 18px;
+  }
+
+  .logo-v2-img {
+    height: 38px;
+    max-width: 130px;
+  }
+
+  .logo-v2-text {
+    font-size: 20px;
+  }
+
+  .nav-v2-link {
+    font-size: 16px;
+    padding: 8px 15px;
+  }
+
+  .header-v2-actions {
+    gap: 12px;
+  }
+}
+
+@media (min-width: 640px) {
+  .header-v2-container {
+    padding: 15px 20px;
+  }
+
+  .logo-v2-img {
+    height: 40px;
+    max-width: 140px;
+  }
+
+  .logo-v2-text {
+    font-size: 24px;
+  }
+
+  .header-v2-actions {
+    gap: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header-v2-container {
+    padding: 15px 25px;
+  }
+
+  .header-v2-nav.desktop-nav {
+    display: flex;
+  }
+
+  .menu-toggle-v2.mobile-only,
+  .mobile-only {
+    display: none;
+  }
+
+  .account-v2 {
+    display: block;
+  }
+
+  .header-v2-mobile-menu {
+    display: none !important;
+  }
+
+  .header-v2-search-bar.active {
+    display: block;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-v2-container {
+    padding: 15px 30px;
+  }
+
+  .header-v2-nav.desktop-nav {
+    gap: 10px;
+  }
+
+  .logo-v2-img {
+    height: 45px;
+  }
+}
+</style>
+
+<script>
+function toggleMenuV2() {
+  const menu = document.getElementById('mobileMenuV2');
+  const toggle = document.querySelector('.menu-toggle-v2');
+
+  menu.classList.toggle('active');
+  toggle.classList.toggle('active');
+}
+
+function toggleSearchV2() {
+  const search = document.getElementById('searchBarV2');
+  search.classList.toggle('active');
+}
+
+// Cerrar menú al hacer click en un link
+document.querySelectorAll('.mobile-nav-v2-link').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('mobileMenuV2').classList.remove('active');
+    document.querySelector('.menu-toggle-v2').classList.remove('active');
+  });
+});
+
+// Toggle para el buscador
+document.addEventListener('DOMContentLoaded', () => {
+  const searchToggle = document.querySelector('.search-toggle-v2');
+  if (searchToggle) {
+    searchToggle.addEventListener('click', toggleSearchV2);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Header V2 - Mejorado",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    }
+  ]
+}
+{% endschema %}

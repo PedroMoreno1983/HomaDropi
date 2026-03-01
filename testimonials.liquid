@@ -1,0 +1,227 @@
+{% comment %}
+  Sección de Testimonios - Responsive
+{% endcomment %}
+
+<section class="testimonials-section" id="section-{{ section.id }}" data-section-id="{{ section.id }}" style="background: {{ section.settings.bg_color }};">
+  <div class="container">
+    
+    {% if section.settings.title != blank %}
+      <h2 class="section-title" style="color: {{ section.settings.text_color }};">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.subtitle != blank %}
+      <p class="section-subtitle" style="color: {{ section.settings.subtitle_color }};">{{ section.settings.subtitle }}</p>
+    {% endif %}
+    
+    <div class="testimonials-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'testimonial' %}
+          <div class="testimonial-card" {{ block.shopify_attributes }}>
+            <div class="testimonial-stars">
+              {% assign stars = block.settings.stars | default: 5 %}
+              {% for i in (1..stars) %}⭐{% endfor %}
+            </div>
+            
+            <p class="testimonial-text">"{{ block.settings.text }}"</p>
+            
+            <div class="testimonial-author">{{ block.settings.author }}</div>
+            
+            {% if block.settings.verified %}
+              <div class="testimonial-verified">
+                <span>✓</span> Compra verificada
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+  </div>
+</section>
+
+<style>
+  #section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+  
+  #section-{{ section.id }} .section-title {
+    text-align: center;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  
+  #section-{{ section.id }} .section-subtitle {
+    text-align: center;
+    font-size: clamp(0.95rem, 2vw, 1.1rem);
+    margin-bottom: 40px;
+    opacity: 0.8;
+  }
+  
+  #section-{{ section.id }} .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+    gap: 25px;
+  }
+  
+  @media (max-width: 991px) {
+    #section-{{ section.id }} .testimonials-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 767px) {
+    #section-{{ section.id }} .testimonials-grid {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    
+    #section-{{ section.id }} .testimonial-text {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Testimonios",
+  "tag": "section",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "Lo que dicen nuestros clientes"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtítulo",
+      "default": "Experiencias reales de quienes confían en HomaDropi"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columnas en Desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Color de fondo",
+      "default": "#f8f9fa"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Color del título",
+      "default": "#2d3748"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Color del subtítulo",
+      "default": "#718096"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espaciado Superior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espaciado Inferior",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "default": 80,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonio",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "label": "Estrellas",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Texto del testimonio",
+          "default": "Excelente producto, noté la diferencia desde la primera semana. La creatina de HomaDropi es de muy buena calidad."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Autor",
+          "default": "Juan Pérez"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Mostrar sello de compra verificada",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonios",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Excelente producto, noté la diferencia desde la primera semana. La creatina de HomaDropi es de muy buena calidad.",
+            "author": "Juan Pérez",
+            "verified": true
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Me ha servido bastante en mi entrenamiento. El envío fue rápido y el producto llegó perfectamente sellado.",
+            "author": "María González",
+            "verified": true
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "stars": 5,
+            "text": "Muy buena relación calidad-precio. La guía que viene incluida es muy completa y útil.",
+            "author": "Carlos Rodríguez",
+            "verified": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
